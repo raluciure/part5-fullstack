@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-const Blog = ({ blog, onLike }) => {
+const Blog = ({ blog, onLike, onDelete, user }) => {
   const [visibleDetails, setVisibleDetails] = useState(false)
 
   const toggleDetails = () => {
@@ -13,6 +13,20 @@ const Blog = ({ blog, onLike }) => {
     border: 'solid',
     borderWidth: 1,
     marginBottom: 5
+  }
+
+  const deleteButtonStyle = {
+    backgroundColor: "blue",
+    color: "white",
+    border: "none",
+    padding: "5px",
+    borderRadius: "5px",
+  }
+
+  const confirmDelete = () => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+      onDelete(blog)
+    }
   }
 
   const details = () => {
@@ -29,6 +43,7 @@ const Blog = ({ blog, onLike }) => {
           </button>
         </div>
         <div>added by {blog.user ? blog.user.name : 'Unknown'}</div>
+        {blog.user.username === user.username && <button onClick={confirmDelete} style={deleteButtonStyle}>remove</button>}
       </div>
     );
   };

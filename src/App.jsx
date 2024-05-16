@@ -67,7 +67,7 @@ const App = () => {
     }
   }
 
-  const onLikeClicked = (blog) => {
+  const handleLikeClicked = (blog) => {
     const updatedBlog = { ...blog, user: blog.user.id, likes: blog.likes + 1 }
 
     blogService.update(blog.id, updatedBlog).then((returnedBlog) => {
@@ -75,7 +75,20 @@ const App = () => {
         blogs.map((blog) => (blog.id !== returnedBlog.id ? blog : returnedBlog))
       )
     })
-  };
+  }
+
+  const handleDeleteBlog = (blog) => {
+    blogService.deleteBlog(blog.id).then(() => {
+      setBlogs(blogs.filter((b) => b.id !== blog.id))
+    })
+
+    setMessage(`blog ${blog.title} by ${blog.author} was succesfully removed`)
+    setType('success')
+    setTimeout(() => {
+      setMessage('')
+      setType('blank')
+    }, 5000)
+  }
 
   if (user === null) {
     return (
@@ -99,7 +112,7 @@ const App = () => {
       <BlogForm onSubmit={handleAddBlog} />
       <br />
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} onLike={onLikeClicked} />
+        <Blog key={blog.id} blog={blog} user={user} onLike={handleLikeClicked} onDelete={handleDeleteBlog} />
       )}
     </div>
   )
