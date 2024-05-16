@@ -67,6 +67,16 @@ const App = () => {
     }
   }
 
+  const onLikeClicked = (blog) => {
+    const updatedBlog = { ...blog, user: blog.user.id, likes: blog.likes + 1 }
+
+    blogService.update(blog.id, updatedBlog).then((returnedBlog) => {
+      setBlogs(
+        blogs.map((blog) => (blog.id !== returnedBlog.id ? blog : returnedBlog))
+      )
+    })
+  };
+
   if (user === null) {
     return (
       <div>
@@ -87,7 +97,7 @@ const App = () => {
       <BlogForm onSubmit={handleAddBlog} />
       <br />
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} onLike={onLikeClicked} />
       )}
     </div>
   )
